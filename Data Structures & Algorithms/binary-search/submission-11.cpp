@@ -4,9 +4,9 @@ public:
         int l = 0, r = nums.size() - 1;
         while (l <= r) {
             int m = l + (r - l) / 2;
-            if (nums[m] == target) {
+            if (nums.at(m) == target) {
                 return m;
-            } else if (nums[m] < target) {
+            } else if (nums.at(m) < target) {
                 l = m + 1;
             } else {
                 r = m - 1;
