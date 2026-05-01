@@ -1,38 +1,31 @@
-#include <vector>
-#include <unordered_map>
 class Solution {
 public:
     string minWindow(string s, string t) {
-        unordered_map<char, int> need;
-        for (const auto& i : t) {
-            ++need[i];
-        }
-
-        int l = 0;
+        unordered_map<char, int> hashT;
+        for (auto& i : t) ++hashT[i];
+        
         int have = 0;
-        string res = "";
-        unordered_map<char, int> seen;
+        int l = 0;
+        string ret;
+        unordered_map<char, int> hashS;
         for (int r = 0; r < s.size(); ++r) {
-            if (need.contains(s.at(r))) {
-                if (seen[s.at(r)] < need.at(s.at(r))) {
+            if (hashS[s.at(r)] < hashT[s.at(r)]) {
                     ++have;
-                }
-                ++seen[s.at(r)];
             }
+            if (hashT.contains(s.at(r))) ++hashS[s.at(r)];
             while (have == t.size()) {
-               if (res.empty() || res.size() > (r - l + 1)) {
-                res = s.substr(l, r - l + 1);
-               }
-               if (seen.contains(s.at(l))) {
-                if (seen.at(s.at(l)) == need.at(s.at(l))) {
+                while (!hashT.contains(s.at(l))) {
+                    ++l;
+                }
+                if (ret == "" or ret.size() > r - l + 1) ret = s.substr(l, r - l + 1);
+
+                if (hashS[s.at(l)] == hashT[s.at(l)]) {
                     --have;
                 }
-                --seen[s.at(l)];
-               }
-               ++l;
+                --hashS[s.at(l)];
+                ++l;
             }
         }
-        return res;
-
+        return ret;
     }
 };
